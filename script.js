@@ -7,12 +7,12 @@ const SELECTIONS = [
         name: 'rock',
         symbol: '✊',
         beats: 'scissors'
-    }, 
+    },
     {
         name: 'paper',
         symbol: '🖐',
         beats: 'rock'
-    }, 
+    },
     {
         name: 'scissors',
         symbol: '✌️',
@@ -89,7 +89,7 @@ function game(result) {
         computerWins++;
         console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
     }
-    if(playerWins === 5) {
+    if (playerWins === 5) {
         console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
         console.log('Nice! You won!');
         setTimeout(() => {
@@ -97,7 +97,7 @@ function game(result) {
             startNewGame();
         });
     }
-    if(computerWins === 5) {
+    if (computerWins === 5) {
         console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
         console.log('Loser');
         setTimeout(() => {
@@ -110,7 +110,7 @@ function game(result) {
 function startNewGame() {
     const newGame = confirm("Would you like to play again?");
     if (!newGame) {
-        window.top.close();
+        window.close();
     } else {
         draws = 0;
         playerWins = 0;
