@@ -108,17 +108,13 @@ function game(result) {
 }
 
 function startNewGame() {
-    const newGame = confirm("Would you like to play again?");
-    if (!newGame) {
-        window.close();
-    } else {
-        draws = 0;
-        playerWins = 0;
-        computerWins = 0;
-        console.log('---------------------------------');
-        console.log('New game started - scores have been reset');
-        resetScoresUI(playerScore, compScore);
-    }
+    alert('Starting a new game...');
+    draws = 0;
+    playerWins = 0;
+    computerWins = 0;
+    console.log('---------------------------------');
+    console.log('New game started - scores have been reset');
+    resetScoresUI(playerScore, compScore);
 }
 
 function resetScoresUI(resetPlayerScore, resetCompScore) {
