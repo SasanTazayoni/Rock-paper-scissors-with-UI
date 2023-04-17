@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,8 +8,9 @@
     <title>Rock paper scissors UI</title>
     <link rel="shortcut icon" href="#">
     <link rel="stylesheet" href="./styles.css">
-    <script src="./script.js" defer></script>
+    <script src="script.js" defer></script>
 </head>
+
 <body>
     <header>
         <h1>Rock paper scissors game</h1>
@@ -28,10 +30,16 @@
                 Computer:
                 <span class="score" data-computer-score>0</span>
             </div>
-        </div> 
+        </div>
     </main>
+    <div class="modal" data-modal>
+        <p class="modal-content" data-modal-content></p>
+        <button class="modal-btn" data-modal-btn>Starting a new game...</button>
+    </div>
+    <div class="overlay" data-overlay></div>
     <footer>
-        &copy; Sasan the Great</a>
+        &copy; Sasan the Great 2023</a>
     </footer>
 </body>
+
 </html>

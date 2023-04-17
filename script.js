@@ -1,7 +1,11 @@
 const selectionButtons = document.querySelectorAll('[data-selection]');
-const lastColumn = document.querySelector('[data-last-column]');
 const playerScore = document.querySelector('[data-player-score]');
 const compScore = document.querySelector('[data-computer-score]');
+const lastColumn = document.querySelector('[data-last-column]');
+const modal = document.querySelector('[data-modal]');
+const modalContent = document.querySelector('[data-modal-content]');
+const modalBtn = document.querySelector('[data-modal-btn]');
+const overlay = document.querySelector('[data-overlay]');
 const SELECTIONS = [
     {
         name: 'rock',
@@ -22,43 +26,44 @@ const SELECTIONS = [
 const WIN = 'WIN';
 const LOSE = 'LOSE';
 const DRAW = 'DRAW';
+let wins = 0;
+let losses = 0;
 let draws = 0;
-let playerWins = 0;
-let computerWins = 0;
+
+function getComputerChoice() {
+    const computerSelection = SELECTIONS[Math.floor(Math.random() * SELECTIONS.length)];
+    return computerSelection;
+}
 
 selectionButtons.forEach(selectionButton => {
     selectionButton.addEventListener('click', () => {
         const selectionName = selectionButton.dataset.selection;
         const playerSelection = SELECTIONS.find(selection => selection.name === selectionName);
-        const result = playRound(playerSelection);
+        computerSelection = getComputerChoice();
+        const result = playRound(computerSelection, playerSelection);
         game(result);
     });
 });
 
-function playRound(playerSelection) {
-    const computerSelection = computerPlay();
+function playRound(computerSelection, playerSelection) {
     const playerWin = determineWinner(playerSelection, computerSelection);
     const computerWin = determineWinner(computerSelection, playerSelection);
-    addSelectionResult(computerSelection, computerWin);
-    addSelectionResult(playerSelection, playerWin);
-    if (playerSelection === computerSelection) {
+    updateUI(computerSelection, computerWin);
+    updateUI(playerSelection, playerWin);
+    if (playerWin) {
+        return WIN;
+    } else if (computerWin) {
+        return LOSE;
+    } else {
         return DRAW;
     }
-    if (playerWin) {
-        incrementScore(playerScore);
-        return WIN;
-    }
-    if (computerWin) {
-        incrementScore(compScore);
-        return LOSE;
-    }
 }
 
-function incrementScore(score) {
-    score.innerText = parseInt(score.innerText) + 1;
+function determineWinner(selection, opponentSelection) {
+    return selection.beats === opponentSelection.name;
 }
 
-function addSelectionResult(selection, winner) {
+function updateUI(selection, winner) {
     const newDiv = document.createElement('div');
     newDiv.innerText = selection.symbol;
     newDiv.classList.add('result');
@@ -68,56 +73,61 @@ function addSelectionResult(selection, winner) {
     lastColumn.after(newDiv);
 }
 
-function determineWinner(selection, opponentSelection) {
-    return selection.beats === opponentSelection.name;
+function incrementScore(score) {
+    score.innerText = parseInt(score.innerText) + 1;
 }
 
-function computerPlay() {
-    return SELECTIONS[Math.floor(Math.random() * SELECTIONS.length)];
-}
-
-function game(result) {
-    if (result === DRAW) {
+function game(gameResult) {
+    if (gameResult === WIN) {
+        wins++;
+        incrementScore(playerScore);
+        console.log(`Wins: ${wins}, Losses: ${losses}, Draws: ${draws}`);
+        console.log('--------------------------');
+    } else if (gameResult === LOSE) {
+        losses++;
+        incrementScore(compScore);
+        console.log(`Wins: ${wins}, Losses: ${losses}, Draws: ${draws}`);
+        console.log('--------------------------');
+    } else {
         draws++;
-        console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
+        console.log(`Wins: ${wins}, Losses: ${losses}, Draws: ${draws}`);
+        console.log('--------------------------');
     }
-    if (result === WIN) {
-        playerWins++
-        console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
-    }
-    if (result === LOSE) {
-        computerWins++;
-        console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
-    }
-    if (playerWins === 5) {
-        console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
-        console.log('Nice! You won!');
-        setTimeout(() => {
-            alert('Game over! You won!');
-            startNewGame();
-        });
-    }
-    if (computerWins === 5) {
-        console.log(`Wins: ${playerWins}, Losses: ${computerWins}, Draws: ${draws}`);
-        console.log('Loser');
-        setTimeout(() => {
-            alert('Game over! You lose!');
-            startNewGame();
-        });
+    if (gameOver()) {
+        openModal();
+        appendMessage();
     }
 }
+
+function gameOver() {
+    return wins === 5 || losses === 5;
+}
+
+function openModal() {
+    modal.classList.add('active');
+    overlay.classList.add('active');
+}
+
+function appendMessage() {
+    return wins > losses 
+    ? (modalContent.textContent = 'Nice! You won!')
+    : (modalContent.textContent = 'You lost... try again');
+}
+
+modalBtn.addEventListener('click', startNewGame)
 
 function startNewGame() {
-    alert('Starting a new game...');
-    draws = 0;
-    playerWins = 0;
-    computerWins = 0;
-    console.log('---------------------------------');
-    console.log('New game started - scores have been reset');
-    resetScoresUI(playerScore, compScore);
+        wins = 0;
+        losses = 0;
+        draws = 0;
+        resetUI(playerScore, compScore);
+        console.log('New game started - scores have been reset');
+        console.log('---------------------------------------------------');
+        modal.classList.remove('active');
+        overlay.classList.remove('active');
 }
 
-function resetScoresUI(resetPlayerScore, resetCompScore) {
+function resetUI(resetPlayerScore, resetCompScore) {
     resetPlayerScore.innerText = 0;
     resetCompScore.innerText = 0;
     const addedDivs = document.querySelectorAll('.result');
