@@ -59,14 +59,6 @@ h1 {
     opacity: 1;
 }
 
-footer {
-    background-color: darkblue;
-    color: white;
-    margin-top: auto;
-    padding: 10px 0;
-    text-align: center;
-}
-
 /* Modal */
 
 .modal {
@@ -118,4 +110,22 @@ footer {
 
 .overlay.active {
     display: block;
+}
+
+footer {
+    background-color: darkblue;
+    cursor: pointer;
+    margin-top: auto;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.github-link {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.github-link:hover {
+    color: rgb(140, 199, 255);
 }
